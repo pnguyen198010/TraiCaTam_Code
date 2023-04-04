@@ -17,7 +17,9 @@
 ** =============================================== */
 
 
-//
+#define LOG_ENABLE
+#define LOG_PORT            Serial
+#define LOG_BAUD_RATE       115200
 
 
 /* ==================================================
@@ -26,7 +28,19 @@
 ** =============================================== */
 
 
-//
+class Log_t
+{
+    public: Log_t();
+
+    public: void raw (const char *fmt);
+    public: void fmt (const char *fmt, ...);
+    public: void inf (const char *fmt, ...);
+    public: void err (const char *fmt, ...);
+    public: void upd (const char *fmt, ...);
+
+    private: uint8_t id;
+    private: static bool flg_init;
+};
 
 
 /* ==================================================
@@ -34,13 +48,8 @@
 **
 ** =============================================== */
 
-void Log_init();
 
-void Log_R(const char *fmt);
-void Log_F(const char *fmt, ...);
-void Log_I(const char *fmt, ...);
-void Log_E(const char *fmt, ...);
-void Log_U(const char *fmt, ...);
+//
 
 
 /* ==================================================
