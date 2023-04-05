@@ -79,7 +79,7 @@ static void myPrintf(const char *format, ...)
         return;
     };
 
-    if(len >= sizeof(loc_buf))
+    if((unsigned long)len >= sizeof(loc_buf))
     {
         temp = (char*) malloc(len+1);
 
