@@ -40,7 +40,7 @@
 ** =============================================== */
 
 
-//
+static bool flg_upd = false;
 
 
 /* ==================================================
@@ -83,6 +83,12 @@ void Log_t::raw(const char *format)
 #ifdef LOG_PORT
 
     if(flg_disable) {return;}
+
+    if(flg_upd) {
+        raw("\n");
+        flg_upd = false;
+    }
+
     LOG_PORT.print(format);
 
 #endif
@@ -92,6 +98,13 @@ void Log_t::raw(const char *format)
 void Log_t::fmt(const char *format, ...)
 {
 #ifdef LOG_PORT
+
+    if(flg_disable) {return;}
+
+    if(flg_upd) {
+        raw("\n");
+        flg_upd = false;
+    }
 
     char buffer[128];
     va_list args;
@@ -141,6 +154,13 @@ void Log_t::inf(const char *format, ...)
 {
 #ifdef LOG_PORT
 
+    if(flg_disable) {return;}
+
+    if(flg_upd) {
+        raw("\n");
+        flg_upd = false;
+    }
+
     va_list args;
     va_start(args, format);
 
@@ -156,12 +176,37 @@ void Log_t::err(const char *format, ...)
 {
 #ifdef LOG_PORT
 
+    if(flg_disable) {return;}
+
+    if(flg_upd) {
+        raw("\n");
+        flg_upd = false;
+    }
+
     va_list args;
     va_start(args, fmt);
 
     fmt("E (%lu) ", millis());
     fmt(format, args);
     raw("\n");
+
+#endif
+}
+
+
+void Log_t::upd(const char *format, ...)
+{
+#ifdef LOG_PORT
+
+    if(flg_disable) {return;}
+    flg_upd = true;
+
+    va_list args;
+    va_start(args, fmt);
+
+    fmt("U (%lu) ", millis());
+    fmt(format, args);
+    raw("\r");
 
 #endif
 }
