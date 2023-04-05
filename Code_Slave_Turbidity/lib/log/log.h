@@ -35,7 +35,7 @@
 class Log_t
 {
     public: Log_t();
-    public: Log_t(bool flg_disable=false);
+    public: Log_t(bool flg_disable);
 
     public: void raw (const char *format);
     public: void fmt (const char *format, ...);
