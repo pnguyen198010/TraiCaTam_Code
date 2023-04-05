@@ -78,24 +78,26 @@ Log_t::Log_t()
 ** =============================================== */
 
 
-void Log_t::raw(const char *fmt)
+void Log_t::raw(const char *format)
 {
 #ifdef LOG_PORT
 
     if(flg_disable) {return;}
-    LOG_PORT.print(fmt);
+    LOG_PORT.print(format);
 
 #endif
 }
 
 
-void Log_t::fmt(const char *fmt, ...)
+void Log_t::fmt(const char *format, ...)
 {
+#ifdef LOG_PORT
+
     char buffer[128];
     va_list args;
 
-    va_start(args, fmt);
-    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
 
     char loc_buf[64];
     char * temp = loc_buf;
@@ -103,10 +105,10 @@ void Log_t::fmt(const char *fmt, ...)
     va_list arg;
     va_list copy;
 
-    va_start(arg, fmt);
+    va_start(arg, format);
     va_copy(copy, arg);
 
-    int len = vsnprintf(temp, sizeof(loc_buf), fmt, copy);
+    int len = vsnprintf(temp, sizeof(loc_buf), format, copy);
     va_end(copy);
 
     if(len < 0) {
@@ -123,13 +125,45 @@ void Log_t::fmt(const char *fmt, ...)
             return;
         }
 
-        len = vsnprintf(temp, len+1, fmt, arg);
+        len = vsnprintf(temp, len+1, format, arg);
     }
 
     va_end(arg);
     LOG_PORT.print(temp);
 
     if(temp != loc_buf) {free(temp);}
+
+#endif
+}
+
+
+void Log_t::inf(const char *format, ...)
+{
+#ifdef LOG_PORT
+
+    va_list args;
+    va_start(args, format);
+
+    fmt("I (%lu) ", millis());
+    fmt(format, args);
+    raw("\n");
+
+#endif
+}
+
+
+void Log_t::err(const char *format, ...)
+{
+#ifdef LOG_PORT
+
+    va_list args;
+    va_start(args, fmt);
+
+    fmt("E (%lu) ", millis());
+    fmt(format, args);
+    raw("\n");
+
+#endif
 }
 
 

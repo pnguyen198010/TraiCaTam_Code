@@ -36,11 +36,11 @@ class Log_t
 {
     public: Log_t();
 
-    public: void raw (const char *fmt);
-    public: void fmt (const char *fmt, ...);
-    public: void inf (const char *fmt, ...);
-    public: void err (const char *fmt, ...);
-    public: void upd (const char *fmt, ...);
+    public: void raw (const char *format);
+    public: void fmt (const char *format, ...);
+    public: void inf (const char *format, ...);
+    public: void err (const char *format, ...);
+    public: void upd (const char *format, ...);
 
     private: bool flg_disable;
 };
