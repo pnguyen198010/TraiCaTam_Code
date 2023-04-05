@@ -2,8 +2,8 @@
 #include <Arduino.h>
 #include <LoRa.h>
 #include <SoftwareSerial.h>
-#define tx 1
-#define rx 0
+#define tx 5
+#define rx 6
 #define nut 12 // D2
 #define led 2 // D10 
 #define M1 8
