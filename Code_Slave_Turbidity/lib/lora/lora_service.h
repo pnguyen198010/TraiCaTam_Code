@@ -1,5 +1,5 @@
-#ifndef lora_h
-#define lora_h
+#ifndef lora_service_h
+#define lora_service_h
 
 
 /* ==================================================
