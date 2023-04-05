@@ -62,10 +62,48 @@
 
 
 /* ==================================================
+** Log_t: Constructors
+**
+** =============================================== */
+
+
+Log_t::Log_t()
+{
+}
+
+
+/* ==================================================
+** Log_t: Methods
+**
+** =============================================== */
+
+
+void Log_t::raw(const char *fmt)
+{
+#ifdef LOG_PORT
+
+    if(flg_disable) {return;}
+    LOG_PORT.print(fmt);
+
+#endif
+}
+
+
+/* ==================================================
 ** Extern function definition
 **
 ** =============================================== */
 
 
-//
+void Log_init()
+{
+#ifdef LOG_PORT
+
+    LOG_PORT.begin(LOG_BAUD_RATE);
+    delay(LOG_TIME_INIT);
+
+    LOG_PORT.print(F("\n\n"));
+
+#endif
+}
 

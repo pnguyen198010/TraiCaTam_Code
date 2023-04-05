@@ -18,8 +18,12 @@
 
 
 #define LOG_ENABLE
+
+#ifdef LOG_ENABLE
 #define LOG_PORT            Serial
 #define LOG_BAUD_RATE       115200
+#define LOG_TIME_INIT       2000
+#endif
 
 
 /* ==================================================
@@ -38,8 +42,7 @@ class Log_t
     public: void err (const char *fmt, ...);
     public: void upd (const char *fmt, ...);
 
-    private: uint8_t id;
-    private: static bool flg_init;
+    private: bool flg_disable;
 };
 
 
@@ -49,7 +52,7 @@ class Log_t
 ** =============================================== */
 
 
-//
+void Log_init();
 
 
 /* ==================================================
