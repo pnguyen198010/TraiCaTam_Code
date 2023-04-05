@@ -72,6 +72,12 @@ Log_t::Log_t()
 }
 
 
+Log_t::Log_t(bool flg_disable)
+{
+    this->flg_disable = flg_disable;
+}
+
+
 /* ==================================================
 ** Log_t: Methods
 **
@@ -209,6 +215,18 @@ void Log_t::upd(const char *format, ...)
     raw("\r");
 
 #endif
+}
+
+
+void Log_t::enable()
+{
+    flg_disable = false;
+}
+
+
+void Log_t::disable()
+{
+    flg_disable = true;
 }
 
 
