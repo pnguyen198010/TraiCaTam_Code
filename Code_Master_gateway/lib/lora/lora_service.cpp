@@ -17,9 +17,9 @@
 
 #define LORA_RX         5
 #define LORA_TX         6
-#define LORA_AUX        4
-#define LORA_M0         7
-#define LORA_M1         8
+#define LORA_AUX        21
+#define LORA_M0         25
+#define LORA_M1         26
 
 #define LORA_BAUD_RATE  UART_BPS_RATE_9600
 
@@ -76,7 +76,7 @@
 // static const byte LORA_ADDH      = 0x2;
 // static const byte LORA_CHAN      = 0x19;
 
-static const uint32_t TIME_UPD_TURBIDITY = 1 * 60 * 1000;
+// static const uint32_t TIME_UPD_TURBIDITY = 1 * 60 * 1000;
 
 static LoRa_E32 e32ttl100(&Serial2, LORA_AUX, LORA_M0, LORA_M1, LORA_BAUD_RATE);
 
