@@ -6,6 +6,8 @@
 
 #include "lora_service.h"
 
+#include "turbidity.h"
+
 
 /* ==================================================
 ** Macro definition
@@ -24,6 +26,10 @@
 #define LORA_ADDL       0x0
 #define LORA_ADDH       0x2
 #define LORA_CHAN       0x19
+
+#define LORA_ADDL_GATEWAY	0x0
+#define LORA_ADDH_GATEWAY	0x1
+#define LORA_CHAN_GATEWAY	0x18
 
 
 /* ==================================================
@@ -59,6 +65,8 @@
 // static const byte LORA_ADDL      = 0x0;
 // static const byte LORA_ADDH      = 0x2;
 // static const byte LORA_CHAN      = 0x19;
+
+static const uint32_t TIME_UPD_TURBIDITY = 1 * 60 * 1000;
 
 static SoftwareSerial mySerial(LORA_TX, LORA_RX);
 static LoRa_E32 e32ttl100(&mySerial, LORA_AUX, LORA_M0, LORA_M1, LORA_BAUD_RATE);
@@ -181,4 +189,21 @@ void Lora_receive_fixedMessage()
         Serial.println(rs.status.getResponseDescription());
         Serial.println(message);
     }
+}
+
+
+void Lora_upd_turbidity()
+{
+	static uint32_t intv = millis();
+
+	if(millis() - intv < TIME_UPD_TURBIDITY) {return;}
+
+	uint8_t turbidity = Turbidity_is_true();
+	String  message   = String(turbidity);
+	ResponseStatus rs = e32ttl100.sendFixedMessage(LORA_ADDH_GATEWAY, LORA_ADDL_GATEWAY, LORA_CHAN_GATEWAY, message);
+	
+    // Serial.println("Send message to 00 03 04");
+    // Serial.println(rs.getResponseDescription());
+
+	intv = millis();
 }

@@ -11,10 +11,10 @@ void setup()
 {
   Log_init();
   Lora_init();
-  
 }
 
 
-void loop() {
-
+void loop() 
+{
+  Lora_upd_turbidity();
 }
