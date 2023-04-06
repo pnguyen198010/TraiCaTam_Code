@@ -7,6 +7,7 @@
 #include "lora_service.h"
 
 #include "turbidity.h"
+#include "bell.h"
 
 
 /* ==================================================
@@ -24,8 +25,8 @@
 #define LORA_BAUD_RATE  UART_BPS_RATE_9600
 
 #define LORA_ADDL       0x0
-#define LORA_ADDH       0x2
-#define LORA_CHAN       0x19
+#define LORA_ADDH       0x1
+#define LORA_CHAN       0x20
 
 #define LORA_ADDL_GATEWAY	0x0
 #define LORA_ADDH_GATEWAY	0x1
@@ -134,6 +135,13 @@ void printModuleInformation(struct ModuleInformation moduleInformation)
 
 void Lora_init()
 {
+	pinMode(LORA_AUX, INPUT);
+	pinMode(LORA_M0, OUTPUT);
+	pinMode(LORA_M1, OUTPUT);
+
+	pinMode(LORA_M0, LOW);
+	pinMode(LORA_M1, LOW);
+
 	e32ttl100.begin();
 
 	ResponseStructContainer c   = e32ttl100.getConfiguration();
@@ -167,18 +175,49 @@ void Lora_init()
 }
 
 
-ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message)
-{
-    ResponseStatus rs = e32ttl100.sendFixedMessage(ADDH, ADDL, CHAN, message);
+// ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message)
+// {
+//     ResponseStatus rs = e32ttl100.sendFixedMessage(ADDH, ADDL, CHAN, message);
 
-    // Serial.println("Send message to 00 03 04");
-    // Serial.println(rs.getResponseDescription());
+//     // Serial.println("Send message to 00 03 04");
+//     // Serial.println(rs.getResponseDescription());
 
-    return rs;
-}
+//     return rs;
+// }
 
 
-void Lora_receive_fixedMessage()
+// void Lora_receive_fixedMessage()
+// {
+//     if (e32ttl100.available() > 1)
+//     {
+//         ResponseContainer rs = e32ttl100.receiveMessage();
+//         // First of all get the data
+//         String message = rs.data;
+
+//         Serial.println(rs.status.getResponseDescription());
+//         Serial.println(message);
+//     }
+// }
+
+
+// void Lora_upd_turbidity()
+// {
+// 	static uint32_t intv = millis();
+
+// 	if(millis() - intv < TIME_UPD_TURBIDITY) {return;}
+
+// 	uint8_t turbidity = Turbidity_is_true();
+// 	String  message   = String(turbidity);
+// 	ResponseStatus rs = e32ttl100.sendFixedMessage(LORA_ADDH_GATEWAY, LORA_ADDL_GATEWAY, LORA_CHAN_GATEWAY, message);
+	
+//     // Serial.println("Send message to 00 03 04");
+//     // Serial.println(rs.getResponseDescription());
+
+// 	intv = millis();
+// }
+
+
+void Lora_upd_bellState()
 {
     if (e32ttl100.available() > 1)
     {
@@ -186,24 +225,25 @@ void Lora_receive_fixedMessage()
         // First of all get the data
         String message = rs.data;
 
-        Serial.println(rs.status.getResponseDescription());
-        Serial.println(message);
+        // Serial.println(rs.status.getResponseDescription());
+        // Serial.println(message);
+
+		if(message.equals("0"))
+		{
+			Bell_alert(ALERT_NONE);
+			return;
+		}
+
+		if(message.equals("1"))
+		{
+			Bell_alert(ALERT_1);
+			return;
+		}
+
+		if(message.equals("2"))
+		{
+			Bell_alert(ALERT_1);
+			return;
+		}
     }
-}
-
-
-void Lora_upd_turbidity()
-{
-	static uint32_t intv = millis();
-
-	if(millis() - intv < TIME_UPD_TURBIDITY) {return;}
-
-	uint8_t turbidity = Turbidity_is_true();
-	String  message   = String(turbidity);
-	ResponseStatus rs = e32ttl100.sendFixedMessage(LORA_ADDH_GATEWAY, LORA_ADDL_GATEWAY, LORA_CHAN_GATEWAY, message);
-	
-    // Serial.println("Send message to 00 03 04");
-    // Serial.println(rs.getResponseDescription());
-
-	intv = millis();
 }

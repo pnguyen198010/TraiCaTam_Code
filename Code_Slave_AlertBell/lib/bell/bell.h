@@ -1,5 +1,5 @@
-#ifndef lora_service_h
-#define lora_service_h
+#ifndef bell_h
+#define bell_h
 
 
 /* ==================================================
@@ -9,8 +9,6 @@
 
 
 #include <Arduino.h>
-#include <LoRa_E32.h>
-#include <SoftwareSerial.h>
 
 
 /* ==================================================
@@ -28,7 +26,14 @@
 ** =============================================== */
 
 
-//
+typedef enum
+{
+    ALERT_NONE      = 0,
+    ALERT_CURR,
+    ALERT_1,
+    ALERT_2,
+
+} Alert_id_t;
 
 
 /* ==================================================
@@ -37,14 +42,9 @@
 ** =============================================== */
 
 
-void Lora_init();
+void Bell_init();
 
-// ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message);
-
-// void Lora_receive_fixedMessage();
-
-// void Lora_upd_turbidity();
-void Lora_upd_bellState();
+void Bell_alert(Alert_id_t id=ALERT_CURR);
 
 
 /* ==================================================
