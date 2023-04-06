@@ -162,7 +162,7 @@ void Lora_init()
 }
 
 
-ResponseStatus Lora_sendFixedMessage(byte ADDH, byte ADDL, byte CHAN, String message)
+ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message)
 {
     ResponseStatus rs = e32ttl100.sendFixedMessage(ADDH, ADDL, CHAN, message);
 
@@ -170,4 +170,18 @@ ResponseStatus Lora_sendFixedMessage(byte ADDH, byte ADDL, byte CHAN, String mes
     // Serial.println(rs.getResponseDescription());
 
     return rs;
+}
+
+
+void Lora_receive_fixedMessage()
+{
+    if (e32ttl100.available() > 1)
+    {
+        ResponseContainer rs = e32ttl100.receiveMessage();
+        // First of all get the data
+        String message = rs.data;
+
+        Serial.println(rs.status.getResponseDescription());
+        Serial.println(message);
+    }
 }
