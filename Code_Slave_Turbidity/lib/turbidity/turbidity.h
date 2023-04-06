@@ -1,5 +1,5 @@
-#ifndef lora_service_h
-#define lora_service_h
+#ifndef turbidity_h
+#define turbidity_h
 
 
 /* ==================================================
@@ -9,8 +9,6 @@
 
 
 #include <Arduino.h>
-#include <LoRa_E32.h>
-#include <SoftwareSerial.h>
 
 
 /* ==================================================
@@ -37,13 +35,9 @@
 ** =============================================== */
 
 
-void Lora_init();
+void Turbidity_init();
 
-// ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message);
-
-// void Lora_receive_fixedMessage();
-
-void Lora_upd_turbidity();
+bool Turbidity_is_true();
 
 
 /* ==================================================
