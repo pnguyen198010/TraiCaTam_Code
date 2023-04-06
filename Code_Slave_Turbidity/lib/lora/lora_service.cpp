@@ -6,9 +6,6 @@
 
 #include "lora_service.h"
 
-#include <LoRa_E32.h>
-#include <SoftwareSerial.h>
-
 
 /* ==================================================
 ** Macro definition
