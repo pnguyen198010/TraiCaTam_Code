@@ -4,12 +4,14 @@
 
 #include "log.h"
 #include "lora_service.h"
+#include "turbidity.h"
 
 
 void setup() 
 {
   Log_init();
   Lora_init();
+  Turbidity_init();
 }
 
 
