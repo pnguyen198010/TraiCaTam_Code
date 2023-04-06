@@ -10,7 +10,6 @@
 
 #include <Arduino.h>
 #include <LoRa_E32.h>
-#include <SoftwareSerial.h>
 
 
 /* ==================================================
@@ -43,7 +42,8 @@ void Lora_init();
 
 // void Lora_receive_fixedMessage();
 
-void Lora_upd_turbidity();
+// void Lora_upd_turbidity();
+void Lora_receive_turbidity();
 
 
 /* ==================================================

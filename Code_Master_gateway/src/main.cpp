@@ -15,5 +15,5 @@ void setup()
 
 void loop() 
 {
-  Lora_upd_turbidity();
+  Lora_receive_turbidity();
 }
