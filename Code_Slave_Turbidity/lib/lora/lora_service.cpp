@@ -31,6 +31,8 @@
 #define LORA_ADDH_GATEWAY	0x1
 #define LORA_CHAN_GATEWAY	0x18
 
+#define LORA_ID_SLAVE	"0"
+
 
 /* ==================================================
 ** Type definition
@@ -167,29 +169,29 @@ void Lora_init()
 }
 
 
-ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message)
-{
-    ResponseStatus rs = e32ttl100.sendFixedMessage(ADDH, ADDL, CHAN, message);
+// ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message)
+// {
+//     ResponseStatus rs = e32ttl100.sendFixedMessage(ADDH, ADDL, CHAN, message);
 
-    // Serial.println("Send message to 00 03 04");
-    // Serial.println(rs.getResponseDescription());
+//     // Serial.println("Send message to 00 03 04");
+//     // Serial.println(rs.getResponseDescription());
 
-    return rs;
-}
+//     return rs;
+// }
 
 
-void Lora_receive_fixedMessage()
-{
-    if (e32ttl100.available() > 1)
-    {
-        ResponseContainer rs = e32ttl100.receiveMessage();
-        // First of all get the data
-        String message = rs.data;
+// void Lora_receive_fixedMessage()
+// {
+//     if (e32ttl100.available() > 1)
+//     {
+//         ResponseContainer rs = e32ttl100.receiveMessage();
+//         // First of all get the data
+//         String message = rs.data;
 
-        Serial.println(rs.status.getResponseDescription());
-        Serial.println(message);
-    }
-}
+//         Serial.println(rs.status.getResponseDescription());
+//         Serial.println(message);
+//     }
+// }
 
 
 void Lora_upd_turbidity()
@@ -199,7 +201,7 @@ void Lora_upd_turbidity()
 	if(millis() - intv < TIME_UPD_TURBIDITY) {return;}
 
 	uint8_t turbidity = Turbidity_is_true();
-	String  message   = String(turbidity);
+	String  message   = String(LORA_ID_SLAVE) + "-" + String(turbidity);
 	ResponseStatus rs = e32ttl100.sendFixedMessage(LORA_ADDH_GATEWAY, LORA_ADDL_GATEWAY, LORA_CHAN_GATEWAY, message);
 	
     // Serial.println("Send message to 00 03 04");
