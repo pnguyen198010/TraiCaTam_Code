@@ -9,6 +9,8 @@
 
 
 #include <Arduino.h>
+#include <LoRa_E32.h>
+#include <SoftwareSerial.h>
 
 
 /* ==================================================
@@ -35,7 +37,13 @@
 ** =============================================== */
 
 
-//
+void Lora_init();
+
+// ResponseStatus Lora_send_fixedMessage(byte ADDH, byte ADDL, byte CHAN, String message);
+
+// void Lora_receive_fixedMessage();
+
+void Lora_upd_turbidity();
 
 
 /* ==================================================
