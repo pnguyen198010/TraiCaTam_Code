@@ -24,13 +24,15 @@
 
 #define LORA_BAUD_RATE  UART_BPS_RATE_9600
 
-#define LORA_ADDL       0x0
-#define LORA_ADDH       0x1
-#define LORA_CHAN       0x20
+#define LORA_ADDL       0x01
+#define LORA_ADDH       0x00
+#define LORA_CHAN       0x1A
 
 #define LORA_ADDL_GATEWAY	0x0
 #define LORA_ADDH_GATEWAY	0x1
 #define LORA_CHAN_GATEWAY	0x18
+
+#define LORA_ID_SLAVE	"B0"
 
 
 /* ==================================================
@@ -69,8 +71,8 @@
 
 static const uint32_t TIME_UPD_TURBIDITY = 1 * 60 * 1000;
 
-static SoftwareSerial mySerial(LORA_TX, LORA_RX);
-static LoRa_E32 e32ttl100(&mySerial, LORA_AUX, LORA_M0, LORA_M1, LORA_BAUD_RATE);
+static SoftwareSerial mySerial(LORA_RX, LORA_TX);
+static LoRa_E32 e32ttl100(&mySerial, LORA_BAUD_RATE);
 
 
 /* ==================================================
@@ -92,38 +94,67 @@ void printModuleInformation(struct ModuleInformation moduleInformation);
 
 void printParameters(struct Configuration configuration) 
 {
-	// Serial.println("----------------------------------------");
+	Serial.println("----------------------------------------");
 
-	// Serial.print(F("HEAD : "));  Serial.print(configuration.HEAD, BIN);Serial.print(" ");Serial.print(configuration.HEAD, DEC);Serial.print(" ");Serial.println(configuration.HEAD, HEX);
-	// Serial.println(F(" "));
-	// Serial.print(F("AddH : "));  Serial.println(configuration.ADDH, BIN);
-	// Serial.print(F("AddL : "));  Serial.println(configuration.ADDL, BIN);
-	// Serial.print(F("Chan : "));  Serial.print(configuration.CHAN, DEC); Serial.print(" -> "); Serial.println(configuration.getChannelDescription());
-	// Serial.println(F(" "));
-	// Serial.print(F("SpeedParityBit     : "));  Serial.print(configuration.SPED.uartParity, BIN);Serial.print(" -> "); Serial.println(configuration.SPED.getUARTParityDescription());
-	// Serial.print(F("SpeedUARTDatte  : "));  Serial.print(configuration.SPED.uartBaudRate, BIN);Serial.print(" -> "); Serial.println(configuration.SPED.getUARTBaudRate());
-	// Serial.print(F("SpeedAirDataRate   : "));  Serial.print(configuration.SPED.airDataRate, BIN);Serial.print(" -> "); Serial.println(configuration.SPED.getAirDataRate());
+	Serial.print(F("HEAD BIN: "));  Serial.print(configuration.HEAD, BIN);Serial.print(" ");Serial.print(configuration.HEAD, DEC);Serial.print(" ");Serial.println(configuration.HEAD, HEX);
+	Serial.println(F(" "));
+	Serial.print(F("AddH BIN: "));  Serial.println(configuration.ADDH, BIN);
+	Serial.print(F("AddL BIN: "));  Serial.println(configuration.ADDL, BIN);
+	Serial.print(F("Chan BIN: "));  Serial.print(configuration.CHAN, DEC); Serial.print(" -> "); Serial.println(configuration.getChannelDescription());
+	Serial.println(F(" "));
+	Serial.print(F("SpeedParityBit BIN    : "));  Serial.print(configuration.SPED.uartParity, BIN);Serial.print(" -> "); Serial.println(configuration.SPED.getUARTParityDescription());
+	Serial.print(F("SpeedUARTDataRate BIN : "));  Serial.print(configuration.SPED.uartBaudRate, BIN);Serial.print(" -> "); Serial.println(configuration.SPED.getUARTBaudRate());
+	Serial.print(F("SpeedAirDataRate BIN  : "));  Serial.print(configuration.SPED.airDataRate, BIN);Serial.print(" -> "); Serial.println(configuration.SPED.getAirDataRate());
 
-	// Serial.print(F("OptionTrans        : "));  Serial.print(configuration.OPTION.fixedTransmission, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getFixedTransmissionDescription());
-	// Serial.print(F("OptionPullup       : "));  Serial.print(configuration.OPTION.ioDriveMode, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getIODroveModeDescription());
-	// Serial.print(F("OptionWakeup       : "));  Serial.print(configuration.OPTION.wirelessWakeupTime, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getWirelessWakeUPTimeDescription());
-	// Serial.print(F("OptionFEC          : "));  Serial.print(configuration.OPTION.fec, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getFECDescription());
-	// Serial.print(F("OptionPower        : "));  Serial.print(configuration.OPTION.transmissionPower, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getTransmissionPowerDescription());
+	Serial.print(F("OptionTrans BIN       : "));  Serial.print(configuration.OPTION.fixedTransmission, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getFixedTransmissionDescription());
+	Serial.print(F("OptionPullup BIN      : "));  Serial.print(configuration.OPTION.ioDriveMode, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getIODroveModeDescription());
+	Serial.print(F("OptionWakeup BIN      : "));  Serial.print(configuration.OPTION.wirelessWakeupTime, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getWirelessWakeUPTimeDescription());
+	Serial.print(F("OptionFEC BIN         : "));  Serial.print(configuration.OPTION.fec, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getFECDescription());
+	Serial.print(F("OptionPower BIN       : "));  Serial.print(configuration.OPTION.transmissionPower, BIN);Serial.print(" -> "); Serial.println(configuration.OPTION.getTransmissionPowerDescription());
 
-	// Serial.println("----------------------------------------");
+	Serial.println("----------------------------------------");
 
 }
 
 
 void printModuleInformation(struct ModuleInformation moduleInformation) 
 {
-	// Serial.println("----------------------------------------");
-	// Serial.print(F("HEAD BIN: "));  Serial.print(moduleInformation.HEAD, BIN);Serial.print(" ");Serial.print(moduleInformation.HEAD, DEC);Serial.print(" ");Serial.println(moduleInformation.HEAD, HEX);
+	Serial.println("----------------------------------------");
+	Serial.print(F("HEAD BIN: "));  Serial.print(moduleInformation.HEAD, BIN);Serial.print(" ");Serial.print(moduleInformation.HEAD, DEC);Serial.print(" ");Serial.println(moduleInformation.HEAD, HEX);
 
-	// Serial.print(F("Freq.: "));  Serial.println(moduleInformation.frequency, HEX);
-	// Serial.print(F("Version  : "));  Serial.println(moduleInformation.version, HEX);
-	// Serial.print(F("Features : "));  Serial.println(moduleInformation.features, HEX);
-	// Serial.println("----------------------------------------");
+	Serial.print(F("Freq.: "));  Serial.println(moduleInformation.frequency, HEX);
+	Serial.print(F("Version  : "));  Serial.println(moduleInformation.version, HEX);
+	Serial.print(F("Features : "));  Serial.println(moduleInformation.features, HEX);
+	Serial.println("----------------------------------------");
+
+}
+
+
+static void printConfig()
+{
+
+	ResponseStructContainer c;
+	c = e32ttl100.getConfiguration();
+
+	// It's important get configuration pointer before all other operation
+	Configuration configuration = *(Configuration*) c.data;
+	Serial.println(c.status.getResponseDescription());
+	Serial.println(c.status.code);
+
+	printParameters(configuration);
+
+	ResponseStructContainer cMi;
+	cMi = e32ttl100.getModuleInformation();
+	// It's important get information pointer before all other operation
+	ModuleInformation mi = *(ModuleInformation*)cMi.data;
+
+	Serial.println(cMi.status.getResponseDescription());
+	Serial.println(cMi.status.code);
+
+	printModuleInformation(mi);
+
+	c.close();
+	cMi.close();
 
 }
 
@@ -139,8 +170,8 @@ void Lora_init()
 	pinMode(LORA_M0, OUTPUT);
 	pinMode(LORA_M1, OUTPUT);
 
-	pinMode(LORA_M0, LOW);
-	pinMode(LORA_M1, LOW);
+	digitalWrite(LORA_M0, HIGH);
+	digitalWrite(LORA_M1, HIGH);
 
 	e32ttl100.begin();
 
@@ -155,7 +186,7 @@ void Lora_init()
 	configuration.ADDH = LORA_ADDH;
 	configuration.CHAN = LORA_CHAN;
 
-	configuration.OPTION.fec                = FEC_0_OFF;
+	configuration.OPTION.fec                = FEC_1_ON;
 	configuration.OPTION.fixedTransmission  = FT_FIXED_TRANSMISSION;
 	configuration.OPTION.ioDriveMode        = IO_D_MODE_PUSH_PULLS_PULL_UPS;
 	configuration.OPTION.transmissionPower  = POWER_17;
@@ -172,6 +203,11 @@ void Lora_init()
 	// printParameters(configuration);
 
 	c.close();
+
+	printConfig();
+
+	digitalWrite(LORA_M0, LOW);
+	digitalWrite(LORA_M1, LOW);
 }
 
 
@@ -219,29 +255,39 @@ void Lora_init()
 
 void Lora_upd_bellState()
 {
-    if (e32ttl100.available() > 1)
+    if (e32ttl100.available() > 0)
     {
         ResponseContainer rs = e32ttl100.receiveMessage();
-        // First of all get the data
         String message = rs.data;
+
+		Serial.print("Message: '");
+		Serial.print(message);
+		Serial.println("'");
+	
+
+		String heartBeat = String(LORA_ID_SLAVE);
+		e32ttl100.sendFixedMessage(LORA_ADDH_GATEWAY, LORA_ADDL_GATEWAY, LORA_CHAN_GATEWAY, heartBeat);
 
         // Serial.println(rs.status.getResponseDescription());
         // Serial.println(message);
 
 		if(message.equals("0"))
 		{
+			Serial.println("Alert 0");
 			Bell_alert(ALERT_NONE);
 			return;
 		}
 
 		if(message.equals("1"))
 		{
+			Serial.println("Alert 1");
 			Bell_alert(ALERT_1);
 			return;
 		}
 
 		if(message.equals("2"))
 		{
+			Serial.println("Alert 2");
 			Bell_alert(ALERT_1);
 			return;
 		}

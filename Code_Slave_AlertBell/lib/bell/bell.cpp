@@ -42,7 +42,7 @@
 
 static uint8_t alert_id = ALERT_NONE;
 
-static uint16_t ticker_alert_1[] = {3000, 3000};
+static uint16_t ticker_alert_1[] = {2000, 2000};
 static uint16_t ticker_alert_2[] = {6000, 3000};
 
 static uint8_t ind_ticker = 0;

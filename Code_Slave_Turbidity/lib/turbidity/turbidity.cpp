@@ -13,7 +13,7 @@
 ** =============================================== */
 
 
-#define TURBIDITY_PIN       13
+#define TURBIDITY_PIN       12
 
 
 /* ==================================================
@@ -75,6 +75,8 @@ void Turbidity_init()
 
 bool Turbidity_is_true()
 {
+    Serial.print("Turbidity: ");
+    Serial.println(digitalRead(TURBIDITY_PIN) == true ? true : false);
     return digitalRead(TURBIDITY_PIN) == true ? true : false;
 }
 

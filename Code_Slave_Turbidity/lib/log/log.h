@@ -22,7 +22,7 @@
 #ifdef LOG_ENABLE
 #define LOG_PORT            Serial
 #define LOG_BAUD_RATE       9600
-#define LOG_TIME_INIT       2000
+#define LOG_TIME_INIT       1000
 #endif
 
 
